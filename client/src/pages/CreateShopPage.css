@@ -1,0 +1,75 @@
+.create-shop-page {
+    min-height: 100vh;
+    background-color: var(--bg-dark);
+    color: var(--text-light);
+}
+
+.create-shop-page .dashboard-container {
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+}
+
+.create-shop-page .form-group {
+    margin-bottom: 1.5rem;
+}
+
+.create-shop-page .input-with-icon {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.create-shop-page .input-with-icon svg {
+    position: absolute;
+    left: 12px;
+    color: var(--text-muted);
+}
+
+.create-shop-page .input-with-icon input {
+    padding-left: 2.5rem;
+}
+
+.create-shop-page .form-input {
+    background: rgba(15, 23, 42, 0.6);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: var(--text-light);
+    border-radius: 8px;
+    padding: 0.75rem 1rem;
+    transition: all 0.2s;
+}
+
+.create-shop-page .form-input:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.2);
+}
+
+.create-shop-page .glass-panel {
+    background: rgba(30, 41, 59, 0.7);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 16px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.create-shop-page .btn-primary {
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 0.75rem 1.5rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.create-shop-page .btn-primary:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+}
+
+.create-shop-page .btn-primary:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+    transform: none;
+}
