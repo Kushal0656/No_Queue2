@@ -17,7 +17,7 @@ export default function UserDashboard() {
 
     const fetchStatus = async () => {
       try {
-        const response = await fetch(`http://localhost:5000/api/queue/user-active/${currentUser.uid}`);
+        const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/queue/user-active/${currentUser.uid}`);
         if (!response.ok) {
           setActiveQueue(null);
           setLoading(false);
@@ -25,11 +25,11 @@ export default function UserDashboard() {
         }
         const data = await response.json();
 
-        const shopRes = await fetch('http://localhost:5000/api/shops');
+        const shopRes = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/shops`);
         const allShops = await shopRes.json();
         const shop = allShops.find(s => s._id === data.shopId);
 
-        const qStatusRes = await fetch(`http://localhost:5000/api/queue/status/${data.shopId}`);
+        const qStatusRes = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/queue/status/${data.shopId}`);
         const qStatus = await qStatusRes.json();
 
         setActiveQueue({

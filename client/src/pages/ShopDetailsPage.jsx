@@ -10,7 +10,7 @@ export default function ShopDetailsPage() {
   const { id } = useParams();
   const navigate = useNavigate();
   const { currentUser } = useAuth();
-  
+
   const [shop, setShop] = useState(null);
   const [loading, setLoading] = useState(true);
   const [joining, setJoining] = useState(false);
@@ -20,17 +20,17 @@ export default function ShopDetailsPage() {
     const fetchShop = async () => {
       try {
         // Fetch all shops to find this one (since we don't have a getShopById endpoint yet, or we can add one, but we can filter from /shops for now)
-        const response = await fetch('http://localhost:5000/api/shops');
+        const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/shops`);
         if (!response.ok) throw new Error('Failed to fetch shops');
         const shops = await response.json();
         const foundShop = shops.find(s => s._id === id);
-        
+
         if (!foundShop) throw new Error('Shop not found');
-        
-        const qRes = await fetch(`http://localhost:5000/api/queue/status/${id}?firebaseUid=${currentUser?.uid || ''}`);
+
+        const qRes = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/queue/status/${id}?firebaseUid=${currentUser?.uid || ''}`);
         let qData = { totalWaiting: 0, currentServingToken: null };
         if (qRes.ok) {
-           qData = await qRes.json();
+          qData = await qRes.json();
         }
 
         setShop({
@@ -56,29 +56,29 @@ export default function ShopDetailsPage() {
 
   const handleJoinQueue = async () => {
     if (!currentUser) {
-      if(window.confirm("You must be logged in to join a queue. Go to login?")) {
+      if (window.confirm("You must be logged in to join a queue. Go to login?")) {
         navigate('/login');
       }
       return;
     }
-    
+
     setJoining(true);
     try {
-      const response = await fetch('http://localhost:5000/api/queue/join', {
+      const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/queue/join`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-           firebaseUid: currentUser.uid,
-           shopId: id
+          firebaseUid: currentUser.uid,
+          shopId: id
         })
       });
 
       const data = await response.json();
       if (!response.ok) {
-         throw new Error(data.message || 'Failed to join queue');
+        throw new Error(data.message || 'Failed to join queue');
       }
 
-      navigate('/queue-status'); 
+      navigate('/queue-status');
     } catch (err) {
       setError(err.message || 'Failed to join queue');
     } finally {
@@ -112,10 +112,10 @@ export default function ShopDetailsPage() {
   return (
     <div className="shop-details-page">
       <Navbar />
-      
+
       <div className="container dashboard-container">
         <div className="back-nav">
-          <Link to="/find-shops" className="text-muted flex-center" style={{justifyContent: 'flex-start', gap: '8px', display: 'inline-flex'}}>
+          <Link to="/find-shops" className="text-muted flex-center" style={{ justifyContent: 'flex-start', gap: '8px', display: 'inline-flex' }}>
             <ArrowLeft size={16} /> Back to Search
           </Link>
         </div>
@@ -124,7 +124,7 @@ export default function ShopDetailsPage() {
           <div className="shop-hero-content">
             <h1 className="text-gradient">{shop.name}</h1>
             <p className="shop-id text-muted">Shop ID: {shop.id}</p>
-            
+
             <div className="shop-meta-tags mt-4">
               <span className="badge-rating text-bold">⭐ {shop.rating} ({shop.reviews} reviews)</span>
               <span className="badge-outline">{shop.category}</span>
@@ -135,7 +135,7 @@ export default function ShopDetailsPage() {
         <div className="shop-grid-layout mt-6">
           <div className="shop-main-info glass-panel">
             <h3 className="section-title">Shop Information</h3>
-            
+
             <div className="info-item">
               <MapPin className="text-accent" size={20} />
               <div>
@@ -155,7 +155,7 @@ export default function ShopDetailsPage() {
 
           <div className="shop-queue-panel glass-panel">
             <h3 className="section-title text-center">Live Queue Status</h3>
-            
+
             <div className="queue-status-circle flex-center mx-auto mt-4">
               <div className="inner-circle flex-center flex-col">
                 <span className="text-muted text-sm">Serving Token</span>
@@ -176,11 +176,11 @@ export default function ShopDetailsPage() {
               </div>
             </div>
 
-            <button 
+            <button
               className="btn-primary full-width mt-6 btn-large flex-center"
               onClick={handleJoinQueue}
               disabled={joining}
-              style={{justifyContent: 'center'}}
+              style={{ justifyContent: 'center' }}
             >
               {joining ? <Loader2 className="spin mr-2" size={20} /> : 'Join Queue Now'}
             </button>

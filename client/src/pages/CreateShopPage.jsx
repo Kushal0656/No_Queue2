@@ -10,7 +10,7 @@ export default function CreateShopPage() {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
-  
+
   const [formData, setFormData] = useState({
     shopName: '',
     shopId: '',
@@ -27,12 +27,12 @@ export default function CreateShopPage() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!currentUser) return setError("Must be logged in");
-    
+
     setLoading(true);
     setError('');
-    
+
     try {
-      const response = await fetch('http://localhost:5000/api/create-shop', {
+      const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/create-shop`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -60,22 +60,22 @@ export default function CreateShopPage() {
   return (
     <div className="create-shop-page">
       <Navbar isAdmin={true} />
-      <div className="container dashboard-container" style={{maxWidth: '600px', margin: '4rem auto'}}>
+      <div className="container dashboard-container" style={{ maxWidth: '600px', margin: '4rem auto' }}>
         <div className="glass-panel p-8">
           <h2 className="text-gradient mb-6 text-center">Register New Shop</h2>
           {error && <div className="text-danger mb-4 text-center">{error}</div>}
-          
-          <form onSubmit={handleSubmit} className="flex-col" style={{gap: '1.5rem'}}>
+
+          <form onSubmit={handleSubmit} className="flex-col" style={{ gap: '1.5rem' }}>
             <div className="form-group">
               <label className="text-muted text-sm mb-2 block">Shop Name</label>
-              <div className="input-with-icon" style={{position: 'relative'}}>
-                <Store size={18} className="text-muted absolute left-3 top-3" style={{position: 'absolute', left: '12px', top: '12px'}} />
-                <input 
-                  type="text" 
+              <div className="input-with-icon" style={{ position: 'relative' }}>
+                <Store size={18} className="text-muted absolute left-3 top-3" style={{ position: 'absolute', left: '12px', top: '12px' }} />
+                <input
+                  type="text"
                   name="shopName"
                   required
-                  className="form-input w-full" 
-                  style={{paddingLeft: '2.5rem', width: '100%'}}
+                  className="form-input w-full"
+                  style={{ paddingLeft: '2.5rem', width: '100%' }}
                   value={formData.shopName}
                   onChange={handleChange}
                   placeholder="e.g. Raj Barber Shop"
@@ -85,12 +85,12 @@ export default function CreateShopPage() {
 
             <div className="form-group">
               <label className="text-muted text-sm mb-2 block">Shop ID (Unique)</label>
-              <input 
-                type="text" 
+              <input
+                type="text"
                 name="shopId"
                 required
                 className="form-input w-full"
-                style={{width: '100%'}} 
+                style={{ width: '100%' }}
                 value={formData.shopId}
                 onChange={handleChange}
                 placeholder="e.g. RB1023"
@@ -100,14 +100,14 @@ export default function CreateShopPage() {
             <div className="grid-2 gap-4">
               <div className="form-group">
                 <label className="text-muted text-sm mb-2 block">Area / Locality</label>
-                <div className="input-with-icon" style={{position: 'relative'}}>
-                  <MapPin size={18} className="text-muted absolute left-3 top-3" style={{position: 'absolute', left: '12px', top: '12px'}} />
-                  <input 
-                    type="text" 
+                <div className="input-with-icon" style={{ position: 'relative' }}>
+                  <MapPin size={18} className="text-muted absolute left-3 top-3" style={{ position: 'absolute', left: '12px', top: '12px' }} />
+                  <input
+                    type="text"
                     name="area"
                     required
                     className="form-input w-full"
-                    style={{paddingLeft: '2.5rem', width: '100%'}}
+                    style={{ paddingLeft: '2.5rem', width: '100%' }}
                     value={formData.area}
                     onChange={handleChange}
                     placeholder="e.g. Ambattur"
@@ -116,12 +116,12 @@ export default function CreateShopPage() {
               </div>
               <div className="form-group">
                 <label className="text-muted text-sm mb-2 block">City</label>
-                <input 
-                  type="text" 
+                <input
+                  type="text"
                   name="city"
                   required
                   className="form-input w-full"
-                  style={{width: '100%'}} 
+                  style={{ width: '100%' }}
                   value={formData.city}
                   onChange={handleChange}
                   placeholder="e.g. Chennai"
@@ -131,16 +131,16 @@ export default function CreateShopPage() {
 
             <div className="form-group">
               <label className="text-muted text-sm mb-2 block">Max Queue Capacity</label>
-              <div className="input-with-icon" style={{position: 'relative'}}>
-                <Users size={18} className="text-muted absolute left-3 top-3" style={{position: 'absolute', left: '12px', top: '12px'}} />
-                <input 
-                  type="number" 
+              <div className="input-with-icon" style={{ position: 'relative' }}>
+                <Users size={18} className="text-muted absolute left-3 top-3" style={{ position: 'absolute', left: '12px', top: '12px' }} />
+                <input
+                  type="number"
                   name="maxCapacity"
                   required
                   min="5"
                   max="100"
                   className="form-input w-full"
-                  style={{paddingLeft: '2.5rem', width: '100%'}}
+                  style={{ paddingLeft: '2.5rem', width: '100%' }}
                   value={formData.maxCapacity}
                   onChange={handleChange}
                 />

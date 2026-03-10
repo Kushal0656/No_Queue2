@@ -25,7 +25,7 @@ export function AuthProvider({ children }) {
       if (user) {
         try {
           // Sync user to backend
-          await fetch('http://localhost:5000/api/auth/sync', {
+          await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/auth/sync`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({

@@ -16,21 +16,21 @@ export default function QueueStatusPage() {
   const fetchStatus = async () => {
     if (!currentUser) return;
     try {
-      const response = await fetch(`http://localhost:5000/api/queue/user-active/${currentUser.uid}`);
+      const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/queue/user-active/${currentUser.uid}`);
       if (!response.ok) {
-         if (response.status === 404 && !loading) {
-            navigate('/dashboard');
-         }
-         return;
+        if (response.status === 404 && !loading) {
+          navigate('/dashboard');
+        }
+        return;
       }
       const data = await response.json();
-      
+
       // Need shop details too, fetch them safely
-      const shopRes = await fetch('http://localhost:5000/api/shops');
+      const shopRes = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/shops`);
       const allShops = await shopRes.json();
       const shop = allShops.find(s => s._id === data.shopId);
 
-      const qStatusRes = await fetch(`http://localhost:5000/api/queue/status/${data.shopId}?firebaseUid=${currentUser.uid}`);
+      const qStatusRes = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/queue/status/${data.shopId}?firebaseUid=${currentUser.uid}`);
       const qStatus = await qStatusRes.json();
 
       setStatus({
@@ -56,10 +56,10 @@ export default function QueueStatusPage() {
 
   const handleLeaveQueue = async () => {
     if (!status || !window.confirm('Are you sure you want to leave the queue? You will lose your spot.')) return;
-    
+
     setLeaving(true);
     try {
-      await fetch(`http://localhost:5000/api/queue/leave`, {
+      await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/queue/leave`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ firebaseUid: currentUser.uid, shopId: status.shop.id })
@@ -99,17 +99,17 @@ export default function QueueStatusPage() {
   return (
     <div className="queue-status-page">
       <Navbar />
-      
+
       <div className="container overflow-hidden pt-8 pb-12">
         <div className="back-nav mb-6">
-          <Link to="/dashboard" className="text-muted flex-center" style={{justifyContent: 'flex-start', gap: '8px', display: 'inline-flex'}}>
+          <Link to="/dashboard" className="text-muted flex-center" style={{ justifyContent: 'flex-start', gap: '8px', display: 'inline-flex' }}>
             <ArrowLeft size={16} /> Back to Dashboard
           </Link>
         </div>
 
         <div className={`queue-live-tracker glass-panel hover-card max-w-lg mx-auto relative overflow-hidden ${isServing ? 'serving-state' : ''}`}>
           <div className="animated-bg-glow"></div>
-          
+
           <div className="live-header flex-between mb-8 relative z-10">
             <div>
               <h2 className="text-gradient">Live Queue</h2>
@@ -126,13 +126,13 @@ export default function QueueStatusPage() {
                 <p className="text-muted mb-2 text-sm uppercase tracking-wide">Current Token</p>
                 <div className="token-display normal pulse-subtle">{status.currentToken}</div>
               </div>
-              
+
               <div className="status-divider">
-                <div className="status-line" style={{ background: isServing ? 'var(--success)' : ''}}></div>
+                <div className="status-line" style={{ background: isServing ? 'var(--success)' : '' }}></div>
                 <div className="status-dots">
-                  <span style={{background: isServing ? 'var(--success)' : ''}}></span>
-                  <span style={{background: isServing ? 'var(--success)' : ''}}></span>
-                  <span style={{background: isServing ? 'var(--success)' : ''}}></span>
+                  <span style={{ background: isServing ? 'var(--success)' : '' }}></span>
+                  <span style={{ background: isServing ? 'var(--success)' : '' }}></span>
+                  <span style={{ background: isServing ? 'var(--success)' : '' }}></span>
                 </div>
               </div>
 
@@ -155,12 +155,12 @@ export default function QueueStatusPage() {
           </div>
 
           {isServing ? (
-             <div className="alert-box alert-success mt-6 relative z-10" style={{background: 'rgba(16, 185, 129, 0.2)'}}>
-             <Bell size={20} />
-             <p className="font-bold">It is your turn! Please proceed to the service area.</p>
-           </div>
+            <div className="alert-box alert-success mt-6 relative z-10" style={{ background: 'rgba(16, 185, 129, 0.2)' }}>
+              <Bell size={20} />
+              <p className="font-bold">It is your turn! Please proceed to the service area.</p>
+            </div>
           ) : isAlmostTurn ? (
-            <div className="alert-box alert-warning mt-6 relative z-10" style={{background: 'rgba(245, 158, 11, 0.1)', borderColor: 'rgba(245, 158, 11, 0.3)', color: '#f59e0b'}}>
+            <div className="alert-box alert-warning mt-6 relative z-10" style={{ background: 'rgba(245, 158, 11, 0.1)', borderColor: 'rgba(245, 158, 11, 0.3)', color: '#f59e0b' }}>
               <Bell size={20} />
               <p>Your turn is approaching! Please arrive at the shop.</p>
             </div>
@@ -170,11 +170,11 @@ export default function QueueStatusPage() {
               <p className="text-muted">We'll notify you when your turn is near.</p>
             </div>
           )}
-          
+
           {!isServing && (
-            <button 
-              className="btn-secondary full-width mt-6 text-danger relative z-10 border-danger flex-center" 
-              style={{marginTop: '1.5rem', background: 'rgba(239, 68, 68, 0.05)'}}
+            <button
+              className="btn-secondary full-width mt-6 text-danger relative z-10 border-danger flex-center"
+              style={{ marginTop: '1.5rem', background: 'rgba(239, 68, 68, 0.05)' }}
               onClick={handleLeaveQueue}
               disabled={leaving}
             >
